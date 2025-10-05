@@ -13,3 +13,55 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  password      String
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orders        Order[]
+}
+
+//order is dummy
+model Order {
+  id            Int       @id @default(autoincrement())
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int
+  totalAmount   Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// imageSrc:
+//       "https://slimages.macysassets.com/is/image/MCY/products/0/optimized/31719270_fpx.tif?qlt=80,0&resMode=sharp2&op_usm=1.75,0.3,2,0&fmt=webp&wid=342&hei=417",
+//     product: "BOSS by Hugo Boss",
+//     id:1,
+//     subtitle: "Logo T-Shirt",
+//     oldPrice: 5311,
+//     vipPrice: 3160,
+//     salePrice: 4514,
+//     discountPercent: 41,
+//     rating: 4,
+//     ratingCount: 93,
+//     colors: ["#E9EFFF", "#212121", "#9FACDF"],
+//     subcategory: "short-kurti"
+
+model Product{
+  id            Int       @id @default(autoincrement())
+  images     String[]
+  product       String
+  subtitle      String
+  oldPrice      Float
+  salePrice     Int
+  rating        Int
+  ratingCount   Int
+  subcategory   String
+}
