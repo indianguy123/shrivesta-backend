@@ -4,7 +4,7 @@ import prisma from "../config/prisma";
 
 export interface AuthRequest extends Request {
   user?: any;
-}   
+}
 
 
 export const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
