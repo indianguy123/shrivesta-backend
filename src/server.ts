@@ -5,7 +5,10 @@ import cors from "cors";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { limiter } from "./middlewares/rateLimiter.middleware";
 import compression from "compression";
-
+import authRoutes from "./routes/auth.route";
+import productRoutes from "./routes/product.route";
+import orderRoutes from "./routes/order.route";
+import cartRoutes from "./routes/cart.route";
 
 const app = express();
 app.use(cors({
@@ -23,6 +26,12 @@ app.use(compression());
 app.use(limiter);
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+
+
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/cart', cartRoutes);
 
 
 app.listen(PORT, () => {
