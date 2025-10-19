@@ -22,7 +22,7 @@ const PORT = 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(errorHandler);
-app.use(compression());
+//app.use(compression());
 app.use(limiter);
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));

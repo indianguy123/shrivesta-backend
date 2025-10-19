@@ -12,15 +12,15 @@ export const getAllProducts = async (req: Request, res: Response) => {
     if (subcategory) filters.subcategory = subcategory;
     let orderBy: any = {};
     if (sortBy === "price_low_to_high") {
-      orderBy = { price: "asc" };
+      orderBy = { salePrice: "asc" };
     } else if (sortBy === "price_high_to_low") {
-      orderBy = { price: "desc" };
+      orderBy = { salePrice: "desc" };
     } else if (sortBy === "rating_low_to_high") {
       orderBy = { rating: "asc" };
     } else if (sortBy === "rating_high_to_low") {
       orderBy = { rating: "desc" };
     } else {
-      orderBy = { createdAt: "desc" };
+      orderBy = { id: "desc" };
     }
     const products = await prisma.product.findMany({
       where: filters,

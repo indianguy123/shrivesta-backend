@@ -13,7 +13,7 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
-    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    const user = await prisma.user.findUnique({ where: { id: (decoded.id) } });
     if (!user) return res.status(404).json({ message: "User not found" });
     (req as any).user = user;
     next();
