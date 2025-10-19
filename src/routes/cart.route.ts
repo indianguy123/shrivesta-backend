@@ -8,7 +8,7 @@ router.use(protect);
 
 router.post("/", addToCart);
 router.get("/", getCart);
-router.put("/:id", updateCartItem);
-router.delete("/:id", removeCartItem);
+router.put("/:productId", updateCartItem);
+router.delete("/:productId", removeCartItem);
 
 export default router;

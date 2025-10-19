@@ -30,11 +30,12 @@ model Order {
   user           User        @relation(fields: [userId], references: [id])
   userId         Int
   totalAmount    Float
-  paymentStatus  String      @default("Pending")
-  deliveryStatus String      @default("Processing")
+  status         String      @default("Pending")
   items          OrderItem[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+  shippingAddress String
+  paymentMethod  String
 }
 
 model OrderItem {

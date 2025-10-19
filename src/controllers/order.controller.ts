@@ -20,7 +20,7 @@ export const createOrderFromCart = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Your cart is empty." });
     }
     const totalAmount = cartItems.reduce(
-      (acc:any, item:any) => acc + item.product.price * item.quantity,
+      (acc: number, item: any) => acc + item.product.salePrice * item.quantity,
       0
     );
     const order = await prisma.order.create({
@@ -37,7 +37,7 @@ export const createOrderFromCart = async (req: Request, res: Response) => {
       orderId: order.id,
       productId: item.productId,
       quantity: item.quantity,
-      price: item.product.price,
+      price: item.product.salePrice,
     }));
 
     await prisma.orderItem.createMany({ data: orderItemsData });

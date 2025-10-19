@@ -55,7 +55,7 @@ export const getCart = async (req: Request, res: Response) => {
 
     // Subtotal = sum of (price * quantity)
     const subtotal = cartItems.reduce(
-      (acc:any, item:any) => acc + item.product.price * item.quantity,
+      (acc:any, item:any) => acc + item.product.salePrice * item.quantity,
       0
     );
 
@@ -121,6 +121,9 @@ export const removeCartItem = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Item removed from cart" });
   } catch (error) {
     console.error("Error removing cart item:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" ,error});
   }
 };
+
+
+//cart route working
