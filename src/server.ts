@@ -9,7 +9,7 @@ import authRoutes from "./routes/auth.route";
 import productRoutes from "./routes/product.route";
 import orderRoutes from "./routes/order.route";
 import cartRoutes from "./routes/cart.route";
-
+import paymentRoutes from "./routes/payment.route";
 const app = express();
 app.use(cors({
   origin: "*",
@@ -32,6 +32,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/cart', cartRoutes);
+app.use('/api/v1/payment', paymentRoutes);
 
 
 app.listen(PORT, () => {
