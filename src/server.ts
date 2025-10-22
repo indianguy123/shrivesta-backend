@@ -10,6 +10,8 @@ import productRoutes from "./routes/product.route";
 import orderRoutes from "./routes/order.route";
 import cartRoutes from "./routes/cart.route";
 import paymentRoutes from "./routes/payment.route";
+import adminRoutes from "./routes/admin.route";
+
 const app = express();
 app.use(cors({
   origin: "*",
@@ -33,6 +35,7 @@ app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/payment', paymentRoutes);
+app.use('/api/v1/admin', adminRoutes);
 
 
 app.listen(PORT, () => {

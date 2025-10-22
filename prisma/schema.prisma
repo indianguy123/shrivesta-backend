@@ -71,7 +71,7 @@ model Product {
   rating      Int
   ratingCount Int
   subcategory String
-  imageUrl    String[]
+  imageUrls    String[]
   orderItems  OrderItem[]
   cartItems   CartItem[]
 }
