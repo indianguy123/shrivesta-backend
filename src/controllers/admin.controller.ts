@@ -1,13 +1,24 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { product, subtitle, oldPrice, salePrice, rating, ratingCount, subcategory, imageUrls } = req.body;
+    const { product, subtitle, oldPrice, salePrice, rating, ratingCount, subcategory } = req.body;
 
-    if (!Array.isArray(imageUrls)) {
-      return res.status(400).json({ message: "imageUrls must be an array of strings" });
+    const files = req.files as Express.Multer.File[];
+    if (!files || files.length === 0) {
+      return res.status(400).json({ message: "Please upload at least one image" });
     }
+
+    const uploadPromises = files.map(async (file) => {
+      const result = await cloudinary.uploader.upload(file.path, { folder: "products" });
+      fs.unlinkSync(file.path); // remove local file after upload
+      return result.secure_url;
+    });
+
+    const imageUrls = await Promise.all(uploadPromises);
 
     const newProduct = await prisma.product.create({
       data: {

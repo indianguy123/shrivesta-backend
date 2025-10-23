@@ -7,12 +7,13 @@ import {
   getAllProductsAdmin,
   getProductByIdAdmin,
 } from "../controllers/admin.controller";
+import { upload } from "../middlewares/upload.middleware";
 
 const router = express.Router();
 
 router.use(protect, isAdmin);
 
-router.post("/products", createProduct);
+router.post("/products",upload.array("images",10), createProduct);
 router.delete("/products/:id", deleteProduct);
 router.get("/products", getAllProductsAdmin);
 router.get("/products/:id", getProductByIdAdmin);
