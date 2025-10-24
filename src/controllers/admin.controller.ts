@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-
+type UploadedImage = {
+  url: string;
+  publicId: string;
+};
 export const createProduct = async (req: Request, res: Response) => {
   try {
     const { product, subtitle, oldPrice, salePrice, rating, ratingCount, subcategory } = req.body;
@@ -12,14 +15,16 @@ export const createProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Please upload at least one image" });
     }
 
-    const uploadPromises = files.map(async (file) => {
+    const uploadPromises: Promise<UploadedImage>[] = files.map(async (file) => {
       const result = await cloudinary.uploader.upload(file.path, { folder: "products" });
-      fs.unlinkSync(file.path); // remove local file after upload
-      return result.secure_url;
+      fs.unlinkSync(file.path);
+      return { url: result.secure_url, publicId: result.public_id };
     });
 
-    const imageUrls = await Promise.all(uploadPromises);
+    const uploadedImages: UploadedImage[] = await Promise.all(uploadPromises);
 
+    const imageUrls = uploadedImages.map((img) => img.url);
+    const imagePublicIds = uploadedImages.map((img) => img.publicId);
     const newProduct = await prisma.product.create({
       data: {
         product,
@@ -30,6 +35,7 @@ export const createProduct = async (req: Request, res: Response) => {
         ratingCount: parseInt(ratingCount),
         subcategory,
         imageUrls,
+        imagePublicIds
       },
     });
 
@@ -45,6 +51,22 @@ export const createProduct = async (req: Request, res: Response) => {
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
+    const product = await prisma.product.findUnique({ where: { id: Number(id) } });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (product.imagePublicIds && product.imagePublicIds.length > 0) {
+      const deletePromises = product.imagePublicIds.map(async (publicId) => {
+        try {
+          await cloudinary.uploader.destroy(publicId);
+        } catch (err) {
+          console.error(`Failed to delete Cloudinary image: ${publicId}`, err);
+        }
+      });
+      await Promise.all(deletePromises);
+    }
 
     await prisma.product.delete({ where: { id: Number(id) } });
 
@@ -78,3 +100,6 @@ export const getProductByIdAdmin = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching product", error: error.message });
   }
 };
+
+
+

@@ -74,6 +74,7 @@ model Product {
   imageUrls    String[]
   orderItems  OrderItem[]
   cartItems   CartItem[]
+  imagePublicIds String[]//to del from cloudinary
 }
 
 //user have many orders,order contian multiple orders,a prduct can be bought multiple times
