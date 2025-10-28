@@ -11,7 +11,34 @@ const storage = multer.diskStorage({
   },
 });
 
+// File filter to only allow image files
+const fileFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) => {
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed!"));
+  }
+};
+
 export const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10mb
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10mb
+    files: 10, // Maximum 10 files
+  },
+});
+
+// Alternative upload configuration that accepts any field name
+export const uploadAny = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10mb
+    files: 10, // Maximum 10 files
+  },
 });
