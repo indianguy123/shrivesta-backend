@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../config/cloudinary";
 import fs from "fs";
 type UploadedImage = {
   url: string;

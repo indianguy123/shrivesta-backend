@@ -13,7 +13,11 @@ const router = express.Router();
 
 router.use(protect, isAdmin);
 
+<<<<<<< HEAD
 router.post("/products", uploadAny.any(), createProduct);
+=======
+router.post("/products",upload.array("images"), createProduct);
+>>>>>>> 68d2a394103717dc36f9272412b8a7ee8e162415
 router.delete("/products/:id", deleteProduct);
 router.get("/products", getAllProductsAdmin);
 router.get("/products/:id", getProductByIdAdmin);
